@@ -18,13 +18,15 @@ jobs:
       with:
         python-version: '3.8'
 
-    - name: Install dependencies
+    - name: Install dependencies for ModelNNFunctionKonfio
       run: |
         cd ModelNNFunctionKonfio
+        pip install joblib pandas -t ./
 
-    - name: Install dependencies
+    - name: Install dependencies for KonfioTesting
       run: |
         cd KonfioTesting
+        pip install joblib pandas -t ./
 
     - name: Package Lambda function ModelNNFunctionKonfio
       run: |
