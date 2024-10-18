@@ -3,8 +3,6 @@ print('INIT - KonfioTesting 000')
 
 import json
 import joblib
-import torch
-import torch.nn as nn
 import pandas as pd
 
 print('INIT - KonfioTesting 001')
