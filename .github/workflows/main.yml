@@ -42,6 +42,10 @@ jobs:
         cd lambda_layers
         zip -r ../lambda_layer.zip .
 
+    - name: List files
+      run: |
+        ls -la  # Esto ayudará a verificar si lambda_layer.zip fue creado
+
     # Publish Lambda Layer
     - name: Publish Lambda Layer
       run: |
