@@ -18,26 +18,48 @@ jobs:
       with:
         python-version: '3.8'
 
+    # Install dependencies for ModelNNFunctionKonfio
     - name: Install dependencies for ModelNNFunctionKonfio
       run: |
         cd ModelNNFunctionKonfio
         pip install joblib pandas -t ./
 
+    # Install dependencies for KonfioTesting
     - name: Install dependencies for KonfioTesting
       run: |
         cd KonfioTesting
         pip install joblib pandas -t ./
 
+    # Create Lambda Layer
+    - name: Install dependencies for Lambda Layer
+      run: |
+        mkdir -p lambda_layers/python
+        pip install joblib pandas -t lambda_layers/python/
+    
+    # Package Lambda Layer
+    - name: Package Lambda Layer
+      run: |
+        cd lambda_layers
+        zip -r ../lambda_layer.zip .
+
+    # Publish Lambda Layer
+    - name: Publish Lambda Layer
+      run: |
+        aws lambda publish-layer-version --layer-name konfio-libraries --zip-file fileb://lambda_layer.zip --compatible-runtimes python3.8
+
+    # Package Lambda function ModelNNFunctionKonfio
     - name: Package Lambda function ModelNNFunctionKonfio
       run: |
         cd ModelNNFunctionKonfio
         zip -r ../ModelNNFunctionKonfio.zip .
 
+    # Package Lambda function KonfioTesting
     - name: Package Lambda function KonfioTesting
       run: |
         cd KonfioTesting
         zip -r ../KonfioTesting.zip .
 
+    # Configure AWS credentials
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -45,10 +67,12 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
+    # Update Lambda function ModelNNFunctionKonfio
     - name: Update Lambda function ModelNNFunctionKonfio
       run: |
         aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME_001 }} --zip-file fileb://ModelNNFunctionKonfio.zip
 
+    # Update Lambda function KonfioTesting
     - name: Update Lambda function KonfioTesting
       run: |
         aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME_002 }} --zip-file fileb://KonfioTesting.zip
