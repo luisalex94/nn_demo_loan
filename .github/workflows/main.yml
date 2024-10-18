@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         cd ModelNNFunctionKonfio
-        pip install torch joblib -t .
+        
 
     - name: Package Lambda function
       run: |
@@ -37,4 +37,4 @@ jobs:
 
     - name: Update Lambda function
       run: |
-        aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME_001 }} --zip-file fileb://../ModelNNFunctionKonfio.zip
+        aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME_001 }} --zip-file fileb://ModelNNFunctionKonfio.zip
