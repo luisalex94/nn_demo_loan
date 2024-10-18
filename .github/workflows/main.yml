@@ -22,46 +22,12 @@ jobs:
     - name: Install dependencies for ModelNNFunctionKonfio
       run: |
         cd ModelNNFunctionKonfio
-        pip install joblib pandas -t ./
-
-    # Install dependencies for KonfioTesting
-    - name: Install dependencies for KonfioTesting
-      run: |
-        cd KonfioTesting
-        pip install joblib pandas -t ./
-
-    # Create Lambda Layer
-    - name: Install dependencies for Lambda Layer
-      run: |
-        mkdir -p lambda_layers/python
-        pip install joblib pandas -t lambda_layers/python/
-    
-    # Package Lambda Layer
-    - name: Package Lambda Layer
-      run: |
-        cd lambda_layers
-        zip -r ../lambda_layer.zip .
-
-    - name: List files
-      run: |
-        ls -la  # Esto ayudará a verificar si lambda_layer.zip fue creado
-
-    # Publish Lambda Layer
-    - name: Publish Lambda Layer
-      run: |
-        aws lambda publish-layer-version --layer-name konfio-libraries --zip-file fileb://lambda_layer.zip --compatible-runtimes python3.8
 
     # Package Lambda function ModelNNFunctionKonfio
     - name: Package Lambda function ModelNNFunctionKonfio
       run: |
         cd ModelNNFunctionKonfio
         zip -r ../ModelNNFunctionKonfio.zip .
-
-    # Package Lambda function KonfioTesting
-    - name: Package Lambda function KonfioTesting
-      run: |
-        cd KonfioTesting
-        zip -r ../KonfioTesting.zip .
 
     # Configure AWS credentials
     - name: Configure AWS credentials
@@ -75,8 +41,3 @@ jobs:
     - name: Update Lambda function ModelNNFunctionKonfio
       run: |
         aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME_001 }} --zip-file fileb://ModelNNFunctionKonfio.zip
-
-    # Update Lambda function KonfioTesting
-    - name: Update Lambda function KonfioTesting
-      run: |
-        aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME_002 }} --zip-file fileb://KonfioTesting.zip
