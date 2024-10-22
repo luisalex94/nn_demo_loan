@@ -7,7 +7,15 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-# RUN pip install -r requirements.txt
+COPY requirements.txt requirements.txt
+COPY app.py app.py
+
+# Copy the model and preprocessing script
+COPY model.pth model.pth
+COPY preprocessor.pkl preprocessor.pkl
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install flask
 RUN pip install flask
