@@ -72,6 +72,35 @@ def saludo():
     preprocessed_data = preprocessor.transform(data)
     
     logging.info('step0004')
+    
+    # Convertir los datos preprocesados a tensor y ajustar la forma
+    X_tensor = torch.tensor(preprocessed_data, dtype=torch.float32)
+
+    logging.info('step0005')
+    
+    # Realizar las predicciones
+    with torch.no_grad():
+        
+        logging.info('step0005 - 1')
+        
+        predictions = model(X_tensor)
+        
+    logging.info('step0006')
+
+    # Aplicar sigmoide si es necesario
+    predictions = torch.sigmoid(predictions)
+    
+    logging.info('step0007')
+
+    # Imprimir resultados
+    print(predictions)
+    
+    logging.info('step0008')
+    
+    # log predictions
+    logging.info(f'predictions: {predictions}')
+    
+    
 
     return jsonify({'mensaje': f'Hola, {nombre}!'})
 
